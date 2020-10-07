@@ -67,6 +67,10 @@ public class VendingMachine extends Coin {
         return payment;
     }
 
+    public void clearPayment() {
+        payment = 0;
+    }
+
     public void clearSafe() {
         safe = 0;
     }
