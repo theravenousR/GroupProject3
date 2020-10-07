@@ -89,12 +89,12 @@ public class tester {
                     if (candyInc.getPurchase() > candyInc.getPayment()) {
                         System.out.println("Insufficient funds!");
                         System.out.println("You are short!");
-                        System.out.println("Returning your money in the amount of: " + "$" + candyInc.getPayment());
+                        System.out.println("Returning your money in the amount of: " + "$" + Math.round(candyInc.getPayment() * 100.0) / 100.0);
                         candyInc.clear();
 
                     }
                     else {
-                        System.out.println("Thank you for your purchase! Here is your change: " + "$" + candyInc.transaction());
+                        System.out.println("Thank you for your purchase! Here is your change: " + "$" + Math.round(candyInc.transaction() * 100.0) / 100.0 );
 
                     }
                     break;
@@ -118,7 +118,6 @@ public class tester {
                     break;
 
                 default:
-                    reader.nextLine();
                     break;
             }
             pick = options();
