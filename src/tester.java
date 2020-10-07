@@ -47,7 +47,9 @@ public class tester {
             int currency = 0;
             int number = 0;
             int productSelect = 0;
+            outerloop:
             switch(pick.toLowerCase()) {
+
                 case "s":
                     for (int x = 0; x < candyInc.showProducts().size(); x++) {
                         System.out.println("#" + (x+1));
@@ -102,6 +104,15 @@ public class tester {
 
                     System.out.println("Enter the product name:");
                     name = reader.nextLine();
+
+                    for (Products x: candyInc.showProducts()) {
+                        if (x.getName().equals(name)) {
+                            x.upQuantity();
+                            System.out.println("Stock Updated");
+                            break outerloop;
+
+                        }
+                    }
                     System.out.println("Enter the price:");
                     price = reader.nextDouble();
                     candyInc.add(new Products(name, price));
