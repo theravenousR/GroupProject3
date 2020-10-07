@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class VendingMachine extends Coin {
     private double purchase;
     private double payment;
+    private double safe = 0;
     private ArrayList<Products> cart = new ArrayList<>();
     private ArrayList<Products> itemList = new ArrayList<>();
 
@@ -58,15 +59,24 @@ public class VendingMachine extends Coin {
         return purchase;
     }
 
+    public double getSafe() {
+        return safe;
+    }
+
     public double getPayment() {
         return payment;
     }
 
+    public void clearSafe() {
+        safe = 0;
+    }
+
     public double transaction() {
+        safe += purchase;
         double change = payment - purchase;
         purchase = 0;
         payment = 0;
-        itemList.clear();
+        cart.clear();
         return change;
     }
 }

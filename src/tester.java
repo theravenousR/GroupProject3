@@ -15,6 +15,8 @@ public class tester {
     public static void main(String[] args) {
         VendingMachine candyInc = new VendingMachine();
         ArrayList<Coin> money = new ArrayList<>();
+        String name = "";
+        double price = 0;
         final Coin DOLLAR = new Coin(1.0, "Dollar");
         final Coin QUARTER = new Coin(0.25, "Quarter");
         final Coin DIME = new Coin(0.1, "Dime");
@@ -63,7 +65,7 @@ public class tester {
                     else {
                         System.out.println("Product is out of stock!");
                     }
-
+                    reader.nextLine();
                     break;
                 case "i":
                     System.out.println("What type of currency are you providing? Press the corresponding number:");
@@ -81,36 +83,42 @@ public class tester {
                     }
                     candyInc.receivePayment(number, money.get(currency-1));
                     System.out.println("$" + candyInc.getPayment() + " is your total added!");
+                    reader.nextLine();
                     break;
                 case "b":
                     if (candyInc.getPurchase() > candyInc.getPayment()) {
                         System.out.println("Insufficient funds!");
-                        System.out.println("You are short: " + "$" + (candyInc.getPayment() - candyInc.getPurchase()));
+                        System.out.println("You are short!");
+                        System.out.println("Returning your money in the amount of: " + "$" + candyInc.getPayment());
+                        candyInc.clear();
+
                     }
                     else {
                         System.out.println("Thank you for your purchase! Here is your change: " + "$" + candyInc.transaction());
+
                     }
                     break;
                 case "a":
-                    String name = "";
-                    double price = 0;
+
                     System.out.println("Enter the product name:");
                     name = reader.nextLine();
                     System.out.println("Enter the price:");
                     price = reader.nextDouble();
                     candyInc.add(new Products(name, price));
                     System.out.println("Product Added!");
+                    reader.nextLine();
                     break;
                 case "r":
-                    if (candyInc.getPayment() <= 0) {
-                        System.out.println("No money added!");
+                    if (candyInc.getSafe() <= 0) {
+                        System.out.println("No money!");
                         break;
                     }
-                    System.out.println("Returning your money in the amount of: " + "$" + candyInc.getPayment());
-                    candyInc.clear();
+                    System.out.println("Removing " + "$" + candyInc.getSafe());
+                    candyInc.clearSafe();
                     break;
-                case "q":
-                    //
+
+                default:
+                    reader.nextLine();
                     break;
             }
             pick = options();
