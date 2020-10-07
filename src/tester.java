@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class tester {
-    static VendingMachine candyInc = new VendingMachine();
+
     public static String options(){
         System.out.println("S)how Products I)nsert Coin B)uy A)dd Product R)emove Coins Q)uit");
         Scanner reader = new Scanner(System.in);
@@ -13,7 +13,18 @@ public class tester {
     }
 
     public static void main(String[] args) {
-        ArrayList<Products> productsList = new ArrayList<>();
+        VendingMachine candyInc = new VendingMachine();
+        ArrayList<Coin> money = new ArrayList<>();
+        final Coin DOLLAR = new Coin(1.0, "Dollar");
+        final Coin QUARTER = new Coin(0.25, "Quarter");
+        final Coin DIME = new Coin(0.1, "Dime");
+        final Coin NICKEL = new Coin(0.05, "Nickel");
+        final Coin PENNY = new Coin(0.01, "Penny");
+        money.add(DOLLAR);
+        money.add(QUARTER);
+        money.add(DIME);
+        money.add(NICKEL);
+        money.add(PENNY);
         Products Coke = new Products("Coke", 1.25);
         Products Pepsi = new Products("Pepsi", 1.05);
         Products Lays = new Products("Lays", 1.50);
@@ -21,13 +32,13 @@ public class tester {
         Products milkyWay = new Products("Milky Way", 1.15);
         Products rCCola = new Products("RC Cola", 0.95);
         Products Peanuts = new Products("Peanuts", 2.15);
-        productsList.add(Coke);
-        productsList.add(Pepsi);
-        productsList.add(rCCola);
-        productsList.add(Lays);
-        productsList.add(Cheetos);
-        productsList.add(Peanuts);
-        productsList.add(milkyWay);
+        candyInc.add(Coke);
+        candyInc.add(Pepsi);
+        candyInc.add(rCCola);
+        candyInc.add(Lays);
+        candyInc.add(Cheetos);
+        candyInc.add(Peanuts);
+        candyInc.add(milkyWay);
         Scanner reader = new Scanner(System.in);
         String pick = options();
         while (!pick.equalsIgnoreCase("Q")) {
@@ -36,11 +47,23 @@ public class tester {
             int productSelect = 0;
             switch(pick.toLowerCase()) {
                 case "s":
-                    for (int x = 0; x < productsList.size(); x++) {
-                        System.out.println(x+1);
-                        System.out.println(productsList.get(x).getName());
-                        System.out.println("$" + productsList.get(x).getValue());
+                    for (int x = 0; x < candyInc.showProducts().size(); x++) {
+                        System.out.println("#" + (x+1));
+                        System.out.println(candyInc.showProducts().get(x).getName());
+                        System.out.println("$" + candyInc.showProducts().get(x).getValue());
+                        System.out.println("Quantity: " + candyInc.showProducts().get(x).getQuantity());
                     }
+                    System.out.println("Select your product: ");
+                    productSelect = (reader.nextInt() - 1);
+                    if (candyInc.addCart(candyInc.showProducts().get(productSelect))) {
+                        candyInc.makePurchase(candyInc.showProducts().get(productSelect).getValue());
+                        System.out.println(candyInc.showProducts().get(productSelect).getName() + " added to cart!");
+                        System.out.println("Your total is: " + "$" + candyInc.getPurchase());
+                    }
+                    else {
+                        System.out.println("Product is out of stock!");
+                    }
+
                     break;
                 case "i":
                     System.out.println("What type of currency are you providing? Press the corresponding number:");
@@ -56,9 +79,8 @@ public class tester {
                         System.out.println("Enter a valid amount!");
                         number = reader.nextInt();
                     }
-                    Coin pay = new Coin(currency, number);
-                    candyInc.receivePayment(new Coin(currency, number));
-                    System.out.println("$" + candyInc.getPayment() + " added!");
+                    candyInc.receivePayment(number, money.get(currency-1));
+                    System.out.println("$" + candyInc.getPayment() + " is your total added!");
                     break;
                 case "b":
                     if (candyInc.getPurchase() > candyInc.getPayment()) {
@@ -70,12 +92,14 @@ public class tester {
                     }
                     break;
                 case "a":
-                    System.out.println("Select your product: ");
-                    productSelect = (reader.nextInt() - 1);
-                    candyInc.add(productsList.get(productSelect));
-                    candyInc.makePurchase(productsList.get(productSelect).getValue());
-                    System.out.println(productsList.get(productSelect).getName() + " added to cart!");
-                    System.out.println("Your total is: " + "$" + candyInc.getPurchase());
+                    String name = "";
+                    double price = 0;
+                    System.out.println("Enter the product name:");
+                    name = reader.nextLine();
+                    System.out.println("Enter the price:");
+                    price = reader.nextDouble();
+                    candyInc.add(new Products(name, price));
+                    System.out.println("Product Added!");
                     break;
                 case "r":
                     if (candyInc.getPayment() <= 0) {
