@@ -58,7 +58,7 @@ public class tester {
                         System.out.println("Quantity: " + candyInc.showProducts().get(x).getQuantity());
                     }
                     System.out.println("Select your product: ");
-                    productSelect = (reader.nextInt() - 1);
+                    productSelect = CheckInput.getIntRange(1, candyInc.showProducts().size()) -1;
                     if (candyInc.addCart(candyInc.showProducts().get(productSelect))) {
                         candyInc.makePurchase(candyInc.showProducts().get(productSelect).getValue());
                         System.out.println(candyInc.showProducts().get(productSelect).getName() + " added to cart!");
@@ -67,7 +67,7 @@ public class tester {
                     else {
                         System.out.println("Product is out of stock!");
                     }
-                    reader.nextLine();
+                    //reader.nextLine();
                     break;
                 case "i":
                     System.out.println("What type of currency are you providing? Press the corresponding number:");
@@ -88,12 +88,18 @@ public class tester {
                     reader.nextLine();
                     break;
                 case "b":
+
                     if (candyInc.getPurchase() > candyInc.getPayment()) {
                         System.out.println("Insufficient funds!");
-                        System.out.println("You are short!");
-                        System.out.println("Returning your money in the amount of: " + "$" + Math.round(candyInc.getPayment() * 100.0) / 100.0);
+                        if (candyInc.getPayment() > 0) {
+                            System.out.println("Returning your money in the amount of: " + "$" + Math.round(candyInc.getPayment() * 100.0) / 100.0);
+                        }
                         candyInc.clearPayment();
-
+                        break;
+                    }
+                    if (candyInc.getPayment() <= 0) {
+                        System.out.println("You haven't made a selection!");
+                        break;
                     }
                     else {
                         System.out.println("Thank you for your purchase! Here is your change: " + "$" + Math.round(candyInc.transaction() * 100.0) / 100.0 );
@@ -114,10 +120,10 @@ public class tester {
                         }
                     }
                     System.out.println("Enter the price:");
-                    price = reader.nextDouble();
+                    price = CheckInput.getDouble();
                     candyInc.add(new Products(name, price));
                     System.out.println("Product Added!");
-                    reader.nextLine();
+
                     break;
                 case "r":
                     if (candyInc.getSafe() <= 0) {
